@@ -3,6 +3,8 @@ package ru.umd.intershop.data.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -21,7 +23,7 @@ public class ProductEntity extends BaseEntity {
     private String description;
 
     @Column
-    private String price;
+    private BigDecimal price;
 
     @Column
     private String image;
