@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Setter
 @Builder
-public class PagingModelAttribute {
+public class PagingModel {
     private Integer pageSize;
 
     private Integer pageNumber;
@@ -17,8 +17,8 @@ public class PagingModelAttribute {
 
     private Boolean hasNext;
 
-    public static PagingModelAttribute of(Page<?> page) {
-        return PagingModelAttribute
+    public static PagingModel of(Page<?> page) {
+        return PagingModel
             .builder()
             .pageSize(page.getSize())
             .pageNumber(page.getNumber())
