@@ -26,5 +26,5 @@ public class ItemEntity extends BaseEntity {
     private BigDecimal price;
 
     @Column
-    private String image;
+    private String imageFileName;
 }
