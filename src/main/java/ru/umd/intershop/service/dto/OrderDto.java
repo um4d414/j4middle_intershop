@@ -13,5 +13,5 @@ public class OrderDto {
 
     private BigDecimal totalPrice;
 
-    private List<Long> productIds;
+    private List<Long> itemIds;
 }

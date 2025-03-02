@@ -22,9 +22,9 @@ public class OrderEntity extends BaseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "order_product",
+        name = "order_items",
         joinColumns = @JoinColumn(name = "order_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id")
+        inverseJoinColumns = @JoinColumn(name = "item_id")
     )
-    private List<ProductEntity> products;
+    private List<ItemEntity> items;
 }
