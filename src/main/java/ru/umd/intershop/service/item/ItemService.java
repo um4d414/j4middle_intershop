@@ -1,4 +1,4 @@
-package ru.umd.intershop.service.product;
+package ru.umd.intershop.service.item;
 
 import org.springframework.data.domain.*;
 import ru.umd.intershop.common.constant.ItemSortingEnum;

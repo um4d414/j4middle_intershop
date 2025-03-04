@@ -1,4 +1,4 @@
-package ru.umd.intershop.service.product.mapper;
+package ru.umd.intershop.service.item.mapper;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

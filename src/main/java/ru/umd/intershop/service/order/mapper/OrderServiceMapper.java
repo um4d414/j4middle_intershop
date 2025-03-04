@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.umd.intershop.data.entity.OrderEntity;
 import ru.umd.intershop.service.dto.*;
-import ru.umd.intershop.service.product.mapper.ItemServiceMapper;
+import ru.umd.intershop.service.item.mapper.ItemServiceMapper;
 
 @Component
 @RequiredArgsConstructor

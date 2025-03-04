@@ -1,4 +1,4 @@
-package ru.umd.intershop.service.product;
+package ru.umd.intershop.service.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.umd.intershop.common.constant.ItemSortingEnum;
 import ru.umd.intershop.data.repository.ItemRepository;
 import ru.umd.intershop.service.dto.ItemDto;
-import ru.umd.intershop.service.product.mapper.ItemServiceMapper;
+import ru.umd.intershop.service.item.mapper.ItemServiceMapper;
 
 import java.util.Optional;
 
@@ -27,10 +27,10 @@ public class DefaultItemService implements ItemService {
     @Override
     public Page<ItemDto> findAllActive(Pageable pageable, ItemSortingEnum sort) {
         return itemRepository.findAllByIsActiveTrue(
-                pageable,
-                Sort.by(
-                    Sort.Direction.ASC,
-                    sort.getEntityField()
+                PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(sort.getEntityField()).ascending()
                 )
             )
             .map(itemServiceMapper::map);

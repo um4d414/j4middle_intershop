@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.umd.intershop.common.constant.ItemSortingEnum;
-import ru.umd.intershop.service.product.ItemService;
+import ru.umd.intershop.service.item.ItemService;
 import ru.umd.intershop.web.model.PagingModel;
 
 @Controller
