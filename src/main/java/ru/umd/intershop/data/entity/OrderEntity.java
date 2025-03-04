@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "orders")
 public class OrderEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +21,6 @@ public class OrderEntity extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "order_items",
-        joinColumns = @JoinColumn(name = "order_id"),
-        inverseJoinColumns = @JoinColumn(name = "item_id")
-    )
-    private List<ItemEntity> items;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItemEntity> items;
 }

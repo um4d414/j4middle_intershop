@@ -10,14 +10,14 @@ public class ItemServiceMapper {
     @Value("${app.image-base-path}")
     private String imageBasePath;
 
-    public ItemDto map(ItemEntity ItemEntity) {
+    public ItemDto map(ItemEntity itemEntity) {
         return ItemDto
             .builder()
-            .id(ItemEntity.getId())
-            .name(ItemEntity.getName())
-            .price(ItemEntity.getPrice())
-            .description(ItemEntity.getDescription())
-            .imgPath(imageBasePath + ItemEntity.getImageFileName())
+            .id(itemEntity.getId())
+            .name(itemEntity.getName())
+            .price(itemEntity.getPrice())
+            .description(itemEntity.getDescription())
+            .imgPath(imageBasePath + itemEntity.getImageFileName())
             .build();
     }
 }

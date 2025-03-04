@@ -24,8 +24,7 @@ public class ItemController {
         @RequestParam(defaultValue = "0") @Min(0) Integer pageNumber,
         @RequestParam(defaultValue = "NO") ItemSortingEnum sort
     ) {
-
-        var items = itemService.findAll(
+        var items = itemService.findAllActive(
             Pageable
                 .ofSize(pageSize)
                 .withPage(pageNumber),

@@ -25,8 +25,8 @@ public class DefaultItemService implements ItemService {
     }
 
     @Override
-    public Page<ItemDto> findAll(Pageable pageable, ItemSortingEnum sort) {
-        return itemRepository.findAll(
+    public Page<ItemDto> findAllActive(Pageable pageable, ItemSortingEnum sort) {
+        return itemRepository.findAllByIsActiveTrue(
                 pageable,
                 Sort.by(
                     Sort.Direction.ASC,

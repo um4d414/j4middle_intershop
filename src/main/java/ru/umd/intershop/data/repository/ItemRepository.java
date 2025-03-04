@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.umd.intershop.data.entity.ItemEntity;
 
 public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
-    Page<ItemEntity> findAll(Pageable pageable, Sort sort);
+    Page<ItemEntity> findAllByIsActiveTrue(Pageable pageable, Sort sort);
 }

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "items")
 public class ItemEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +28,7 @@ public class ItemEntity extends BaseEntity {
 
     @Column
     private String imageFileName;
+
+    @Column(nullable = false)
+    private Boolean isActive;
 }
