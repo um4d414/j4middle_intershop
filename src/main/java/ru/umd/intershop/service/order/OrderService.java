@@ -1,5 +1,6 @@
 package ru.umd.intershop.service.order;
 
+import ru.umd.intershop.common.constant.ItemCountAction;
 import ru.umd.intershop.service.dto.OrderDto;
 
 import java.util.List;
@@ -9,4 +10,8 @@ public interface OrderService {
     Optional<OrderDto> findById(Long id);
 
     List<OrderDto> findAll();
+
+    OrderDto getCart();
+
+    void updateItemCount(Long id, ItemCountAction action);
 }

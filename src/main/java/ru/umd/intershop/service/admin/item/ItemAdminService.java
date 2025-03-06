@@ -9,16 +9,15 @@ import ru.umd.intershop.service.admin.dto.ItemForm;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ItemAdminService {
-    @Value("${app.image-base-path}")
-    private String imageBasePath;
-
     private final ItemRepository itemRepository;
+
+    @Value("${app.image-file-base-path}")
+    private String imageBasePath;
 
     public void createItem(ItemForm itemForm) {
         var file = itemForm.getImageFile();

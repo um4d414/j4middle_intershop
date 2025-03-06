@@ -1,4 +1,4 @@
-package ru.umd.intershop.data.entity;
+package ru.umd.intershop.data.entity.embedded;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;

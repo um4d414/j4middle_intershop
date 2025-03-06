@@ -1,15 +1,11 @@
 package ru.umd.intershop.service.item.mapper;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.umd.intershop.data.entity.ItemEntity;
 import ru.umd.intershop.service.dto.ItemDto;
 
 @Component
 public class ItemServiceMapper {
-    @Value("${app.image-base-path}")
-    private String imageBasePath;
-
     public ItemDto map(ItemEntity itemEntity) {
         return ItemDto
             .builder()
@@ -17,7 +13,7 @@ public class ItemServiceMapper {
             .name(itemEntity.getName())
             .price(itemEntity.getPrice())
             .description(itemEntity.getDescription())
-            .imgPath(imageBasePath + itemEntity.getImageFileName())
+            .imageFileName(itemEntity.getImageFileName())
             .build();
     }
 }

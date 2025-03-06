@@ -16,5 +16,5 @@ public class ItemDto {
 
     private BigDecimal price;
 
-    private String imgPath;
+    private String imageFileName;
 }

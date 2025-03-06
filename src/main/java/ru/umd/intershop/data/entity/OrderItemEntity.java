@@ -2,6 +2,7 @@ package ru.umd.intershop.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.umd.intershop.data.entity.embedded.OrderItemId;
 
 @Entity
 @Getter
@@ -10,9 +11,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "order_items")
-public class OrderItemEntity {
+public class OrderItemEntity extends BaseEntity {
     @EmbeddedId
-    private OrderItemId id;
+    @Builder.Default
+    private OrderItemId id = new OrderItemId();
 
     @ManyToOne
     @MapsId("orderId")

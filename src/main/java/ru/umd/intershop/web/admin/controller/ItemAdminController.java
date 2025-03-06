@@ -1,4 +1,4 @@
-package ru.umd.intershop.web.admin;
+package ru.umd.intershop.web.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,14 +15,14 @@ public class ItemAdminController {
     @GetMapping("/items/add")
     public String showAddItemForm(Model model) {
         model.addAttribute("itemForm", new ItemForm());
+
         return "admin-item-add";
     }
 
-    // Обработка отправки формы
     @PostMapping("/items/add")
     public String addItem(@ModelAttribute("itemForm") ItemForm itemForm) {
         itemAdminService.createItem(itemForm);
-        // После успешного добавления можно перенаправить на список продуктов
+
         return "redirect:/items/add";
     }
 }
