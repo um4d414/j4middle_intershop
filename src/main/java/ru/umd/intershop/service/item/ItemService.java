@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface ItemService {
     Optional<ItemDto> findById(Long id);
 
-    Page<ItemDto> findAllActive(Pageable pageable, ItemSortingEnum sort);
+    Page<ItemDto> findAllActive(Pageable pageable, ItemSortingEnum sort, String search);
 }

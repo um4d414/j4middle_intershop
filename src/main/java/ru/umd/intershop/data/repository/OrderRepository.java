@@ -6,6 +6,7 @@ import org.springframework.lang.NonNull;
 import ru.umd.intershop.common.constant.OrderStatusEnum;
 import ru.umd.intershop.data.entity.OrderEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
@@ -16,4 +17,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     void delete(@NonNull OrderEntity entity);
 
     Optional<OrderEntity> findLastByStatus(OrderStatusEnum status);
+
+    List<OrderEntity> findAllByStatus(OrderStatusEnum status);
 }

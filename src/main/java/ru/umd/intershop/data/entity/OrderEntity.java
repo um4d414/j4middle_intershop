@@ -20,6 +20,7 @@ public class OrderEntity extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private OrderStatusEnum status;
 
     @Column(nullable = false)

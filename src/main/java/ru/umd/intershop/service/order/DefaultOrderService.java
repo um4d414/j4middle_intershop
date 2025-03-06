@@ -3,7 +3,7 @@ package ru.umd.intershop.service.order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.umd.intershop.common.constant.ItemCountAction;
+import ru.umd.intershop.common.constant.CartItemAction;
 import ru.umd.intershop.common.constant.OrderStatusEnum;
 import ru.umd.intershop.data.entity.OrderEntity;
 import ru.umd.intershop.data.entity.OrderItemEntity;
@@ -28,13 +28,15 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public Optional<OrderDto> findById(Long id) {
-        return Optional.empty();
+        return orderRepository
+            .findById(id)
+            .map(orderServiceMapper::map);
     }
 
     @Override
-    public List<OrderDto> findAll() {
+    public List<OrderDto> findAllCompleted() {
         return orderRepository
-            .findAll()
+            .findAllByStatus(OrderStatusEnum.COMPLETED)
             .stream()
             .map(orderServiceMapper::map)
             .toList();
@@ -49,7 +51,7 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     @Transactional
-    public void updateItemCount(Long id, ItemCountAction action) {
+    public void updateItemCount(Long id, CartItemAction action) {
         var cart = getCartEntity();
 
         var orderItem = cart.getItems()
@@ -71,17 +73,43 @@ public class DefaultOrderService implements OrderService {
                 );
             });
 
-        orderItem.setCount(
-            ItemCountAction.PLUS.equals(action)
-                ? orderItem.getCount() + 1
-                : orderItem.getCount() - 1
-        );
+        switch (action) {
+            case PLUS -> orderItem.setCount(orderItem.getCount() + 1);
+            case MINUS -> orderItem.setCount(orderItem.getCount() - 1);
+            case DELETE -> {
+                cart.getItems().remove(orderItem);
+                orderItemRepository.deleteById(orderItem.getId());
+                return;
+            }
+        }
 
-        if (orderItem.getCount() < 0) {
+        if (orderItem.getCount() <= 0) {
             orderItem.setCount(0);
         }
 
         orderItemRepository.save(orderItem);
+    }
+
+    @Override
+    @Transactional
+    public Long processCart() {
+        var cartOrderEntity = orderRepository
+            .findLastByStatus(OrderStatusEnum.NEW)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        cartOrderEntity.setTotalPrice(
+            cartOrderEntity
+                .getItems()
+                .stream()
+                .map(
+                    orderItem -> orderItem.getItem().getPrice()
+                        .multiply(BigDecimal.valueOf(orderItem.getCount()))
+                )
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+        );
+
+        cartOrderEntity.setStatus(OrderStatusEnum.COMPLETED);
+        return orderRepository.save(cartOrderEntity).getId();
     }
 
     private OrderEntity getCartEntity() {

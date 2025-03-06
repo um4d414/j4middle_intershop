@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ItemCountAction {
+public enum CartItemAction {
     PLUS,
-    MINUS
+    MINUS,
+    DELETE
 }

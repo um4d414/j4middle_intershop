@@ -1,23 +1,25 @@
 package ru.umd.intershop.web.controller;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.umd.intershop.common.constant.ItemCountAction;
+import ru.umd.intershop.common.constant.CartItemAction;
 import ru.umd.intershop.common.constant.ItemSortingEnum;
 import ru.umd.intershop.service.item.ItemService;
 import ru.umd.intershop.service.order.OrderService;
 import ru.umd.intershop.web.model.ItemModel;
 import ru.umd.intershop.web.model.PagingModel;
 
+import java.util.stream.IntStream;
+
 @Controller
 @RequiredArgsConstructor
 public class ItemController {
+    private static final int ITEM_ROW_SIZE = 3;
+
     private final ItemService itemService;
 
     private final OrderService orderService;
@@ -27,42 +29,52 @@ public class ItemController {
         Model model,
         @RequestParam(defaultValue = "10") @Max(100) Integer pageSize,
         @RequestParam(defaultValue = "0") @Min(0) Integer pageNumber,
-        @RequestParam(defaultValue = "NO") ItemSortingEnum sort
+        @RequestParam(defaultValue = "NO") ItemSortingEnum sort,
+        @RequestParam(required = false) @Size(min = 2) String search
     ) {
-        var items = itemService.findAllActive(
+        var itemsPage = itemService.findAllActive(
             Pageable
                 .ofSize(pageSize)
                 .withPage(pageNumber),
-            sort
+            sort,
+            search
         );
 
         var cart = orderService.getCart();
 
-        model.addAttribute("paging", PagingModel.of(items));
-        model.addAttribute(
-            "items",
-            items
-                .getContent()
-                .stream()
-                .map(item -> {
-                         var orderItem = cart
-                             .getItems()
-                             .stream()
-                             .filter(it -> it.getItem().getId().equals(item.getId()))
-                             .findFirst();
+        var itemsDtoList = itemsPage.getContent()
+            .stream()
+            .map(item -> {
+                     var orderItem = cart
+                         .getItems()
+                         .stream()
+                         .filter(it -> it.getItem().getId().equals(item.getId()))
+                         .findFirst();
 
-                         return ItemModel
-                             .builder()
-                             .id(item.getId())
-                             .imgPath("images/" + item.getImageFileName())
-                             .title(item.getName())
-                             .description(item.getDescription())
-                             .price(item.getPrice().toPlainString())
-                             .count(orderItem.isPresent() ? orderItem.get().getCount() : 0)
-                             .build();
-                     }
-                )
-        );
+                     return ItemModel
+                         .builder()
+                         .id(item.getId())
+                         .imgPath(item.getImagePath())
+                         .title(item.getName())
+                         .description(item.getDescription())
+                         .price(item.getPrice())
+                         .count(orderItem.isPresent() ? orderItem.get().getCount() : 0)
+                         .build();
+                 }
+            )
+            .toList();
+
+        var structuredByRowItems = IntStream
+            .range(0, (itemsDtoList.size() + ITEM_ROW_SIZE - 1) / ITEM_ROW_SIZE)
+            .mapToObj(i -> itemsDtoList.subList(
+                i * ITEM_ROW_SIZE,
+                Math.min((i + 1) * ITEM_ROW_SIZE, itemsDtoList.size())
+            ))
+            .toList();
+
+
+        model.addAttribute("paging", PagingModel.of(itemsPage));
+        model.addAttribute("items", structuredByRowItems);
 
         return "main";
     }
@@ -87,7 +99,7 @@ public class ItemController {
             .imgPath("images/" + item.getImageFileName())
             .title(item.getName())
             .description(item.getDescription())
-            .price(item.getPrice().toPlainString())
+            .price(item.getPrice())
             .count(orderItem.isPresent() ? orderItem.get().getCount() : 0)
             .build();
 
@@ -104,7 +116,7 @@ public class ItemController {
         @PathVariable Long id,
         @RequestParam("action") String action
     ) {
-        orderService.updateItemCount(id, ItemCountAction.valueOf(action.toUpperCase()));
+        orderService.updateItemCount(id, CartItemAction.valueOf(action.toUpperCase()));
 
         return "redirectBack";
     }

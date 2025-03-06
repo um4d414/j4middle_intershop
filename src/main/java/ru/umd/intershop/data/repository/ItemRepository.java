@@ -6,4 +6,6 @@ import ru.umd.intershop.data.entity.ItemEntity;
 
 public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
     Page<ItemEntity> findAllByIsActiveTrue(Pageable pageable);
+
+    Page<ItemEntity> findAllByIsActiveTrueAndNameLikeIgnoreCase(Pageable pageable, String search);
 }

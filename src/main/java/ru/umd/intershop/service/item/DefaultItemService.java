@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import ru.umd.intershop.common.constant.ItemSortingEnum;
+import ru.umd.intershop.data.entity.ItemEntity;
 import ru.umd.intershop.data.repository.ItemRepository;
 import ru.umd.intershop.service.dto.ItemDto;
 import ru.umd.intershop.service.item.mapper.ItemServiceMapper;
@@ -25,14 +26,32 @@ public class DefaultItemService implements ItemService {
     }
 
     @Override
-    public Page<ItemDto> findAllActive(Pageable pageable, ItemSortingEnum sort) {
-        return itemRepository.findAllByIsActiveTrue(
+    public Page<ItemDto> findAllActive(
+        Pageable pageable,
+        ItemSortingEnum sort,
+        String search
+    ) {
+        Page<ItemEntity> itemEntityList;
+
+        if (search == null || search.isEmpty()) {
+            itemEntityList = itemRepository.findAllByIsActiveTrue(
                 PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
                     Sort.by(sort.getEntityField()).ascending()
                 )
-            )
-            .map(itemServiceMapper::map);
+            );
+        } else {
+            itemEntityList = itemRepository.findAllByIsActiveTrueAndNameLikeIgnoreCase(
+                PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(sort.getEntityField()).ascending()
+                ),
+                search
+            );
+        }
+
+        return itemEntityList.map(itemServiceMapper::map);
     }
 }

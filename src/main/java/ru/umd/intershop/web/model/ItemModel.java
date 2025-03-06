@@ -3,6 +3,8 @@ package ru.umd.intershop.web.model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 public class ItemModel {
@@ -12,7 +14,7 @@ public class ItemModel {
 
     private String title;
 
-    private String price;
+    private BigDecimal price;
 
     private String description;
 
