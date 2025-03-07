@@ -24,6 +24,19 @@ repositories {
     mavenCentral()
 }
 
+liquibase {
+    activities {
+        main {
+            changeLogFile 'src/main/resources/db/changelog/changelog-master.xml'
+            url 'jdbc:postgresql://localhost:5432/postgres'
+            username 'postgres'
+            password 'postgres'
+            driver 'org.postgresql.Driver'
+        }
+    }
+    runList = 'main'
+}
+
 dependencies {
     // SPRING
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
