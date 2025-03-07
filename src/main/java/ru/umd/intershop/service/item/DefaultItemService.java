@@ -48,7 +48,7 @@ public class DefaultItemService implements ItemService {
                     pageable.getPageSize(),
                     Sort.by(sort.getEntityField()).ascending()
                 ),
-                search
+                "%" + search + "%"
             );
         }
 

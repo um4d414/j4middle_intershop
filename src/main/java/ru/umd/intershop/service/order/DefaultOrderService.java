@@ -12,8 +12,7 @@ import ru.umd.intershop.service.dto.OrderDto;
 import ru.umd.intershop.service.order.mapper.OrderServiceMapper;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +62,7 @@ public class DefaultOrderService implements OrderService {
                     .findById(id)
                     .orElseThrow(() -> new RuntimeException("Item not found"));
 
-                return orderItemRepository.save(
+                var orderItemEntity = orderItemRepository.save(
                     OrderItemEntity
                         .builder()
                         .count(0)
@@ -71,6 +70,9 @@ public class DefaultOrderService implements OrderService {
                         .order(cart)
                         .build()
                 );
+
+                cart.getItems().add(orderItemEntity);
+                return orderItemEntity;
             });
 
         switch (action) {
@@ -119,7 +121,7 @@ public class DefaultOrderService implements OrderService {
                 var entity = new OrderEntity();
                 entity.setStatus(OrderStatusEnum.NEW);
                 entity.setTotalPrice(BigDecimal.ZERO);
-                entity.setItems(List.of());
+                entity.setItems(new ArrayList<>());
 
                 return orderRepository.save(entity);
             });

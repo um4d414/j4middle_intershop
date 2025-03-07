@@ -15,6 +15,7 @@ public class OrderServiceMapper {
         return OrderDto
             .builder()
             .id(orderEntity.getId())
+            .status(orderEntity.getStatus())
             .totalPrice(orderEntity.getTotalPrice())
             .items(
                 orderEntity

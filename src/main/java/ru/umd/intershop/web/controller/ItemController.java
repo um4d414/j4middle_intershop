@@ -27,10 +27,10 @@ public class ItemController {
     @GetMapping("/main/items")
     public String mainPage(
         Model model,
-        @RequestParam(defaultValue = "10") @Max(100) Integer pageSize,
-        @RequestParam(defaultValue = "0") @Min(0) Integer pageNumber,
-        @RequestParam(defaultValue = "NO") ItemSortingEnum sort,
-        @RequestParam(required = false) @Size(min = 2) String search
+        @RequestParam(name = "pageSize", defaultValue = "10") @Max(100) Integer pageSize,
+        @RequestParam(name = "pageNumber", defaultValue = "0") @Min(0) Integer pageNumber,
+        @RequestParam(name = "sort", defaultValue = "NO") ItemSortingEnum sort,
+        @RequestParam(name = "search", required = false) String search
     ) {
         var itemsPage = itemService.findAllActive(
             Pageable
